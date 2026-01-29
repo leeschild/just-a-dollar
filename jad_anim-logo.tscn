@@ -1,87 +1,11 @@
 [gd_scene format=3 uid="uid://chwdbxn7tvwc"]
 
-[ext_resource type="FontFile" uid="uid://c25qy2xdxsxiq" path="res://Bigfatgothic-Regular.ttf" id="2_apcfy"]
+[ext_resource type="FontFile" uid="uid://bnyrg7uaiknn7" path="res://Rencana.otf" id="2_apcfy"]
 [ext_resource type="Texture2D" uid="uid://l1ga8lk5vo5p" path="res://jad_dollar.png" id="2_dcdue"]
+[ext_resource type="Shader" uid="uid://b8mqqcn6vem1m" path="res://jad_anim-dollar.gdshader" id="3_apcfy"]
 
-[sub_resource type="Shader" id="Shader_238np"]
-code = "shader_type canvas_item;
-
-// The amplitude of the wave.
-uniform float waveAmplitude: hint_range(0.0, 1.0) = 0.25;
-// If true corrects the Vertexes to adjust for the UV displacement
-uniform bool correctVertex = true;
-// The frequency of the wave.
-uniform float waveFrequency: hint_range(0.0, 100.0) = 10.0;
-// If true the texture waves vertically otherwise horizontally.
-uniform bool verticalWave = true;
-// If true the sprite will deform to match the waves, otherwise we keep the background color clamped.
-uniform bool keepTransparency = true;
-// If true the TIME constant is used, otherwise progress is used to move the wave.
-uniform bool useTime = true;
-// If useTime is true then use this as a multiplier for the wave speed.
-uniform float waveSpeed: hint_range(0.0, 100.0) = 1.0;
-// If useTime is false then use this as a multiplier for the wave progress.
-uniform float progress: hint_range(0.0, 1.0) = 0.0;
-// How much of the left or top half of the texture is modified.
-uniform float firstHalf: hint_range(0.0, 1.0) = 0.5;
-// How much of the right or bottom half of the texture is modified.
-uniform float secondHalf: hint_range(0.0, 1.0) = 0.5;
-// Keeps one half stuck. Useful for things like flags.
-uniform bool freezeFirstHalf = false;
-// Keeps one half stuck. Useful for things like flags.
-uniform bool freezeSecondHalf = false;
-
-void vertex() {
-	if (correctVertex) {
-		VERTEX = (verticalWave ? vec2(VERTEX.x, VERTEX.y * (1.0 + waveAmplitude)): vec2(VERTEX.x * (1.0 + waveAmplitude), VERTEX.y));
-	}
-}
-
-void fragment() {
-	vec2 uv = UV;
-	float waveUv = (verticalWave ? uv.x : uv.y);
-	float againstWaveUv = (verticalWave ? uv.y: uv.x);
-	float freezeFactor = 1.0;
-	if (freezeFirstHalf) {freezeFactor = waveUv;} else if (freezeSecondHalf) {freezeFactor = 1.0 - waveUv;}
-	if (againstWaveUv < firstHalf || againstWaveUv > 1.0 - secondHalf) {
-		float wave;
-		// Progress based on time or progress variable.
-		if (useTime) {
-			wave = freezeFactor * sin(waveUv * waveFrequency + TIME * waveSpeed) * (waveAmplitude / 4.0);
-		} else {
-			wave = freezeFactor * sin(waveUv * waveFrequency + progress * 2.0 * PI) * (waveAmplitude / 4.0);
-		}
-		vec2 aspect = vec2(TEXTURE_PIXEL_SIZE.x / TEXTURE_PIXEL_SIZE.y, 1.0);
-	    vec2 center = 0.5 * aspect;
-		// Wave the UV.
-		uv -= center;
-		if (verticalWave) {
-		    uv.y += wave;
-			uv.y += uv.y * waveAmplitude;
-		} else {
-		    uv.x += wave;
-			uv.x += uv.x * waveAmplitude;
-		}
-		uv += center;
-		// Clamp the UVs to prevent texture wrapping.
-		uv = clamp(uv, vec2(0.0), vec2(1.0));
-		againstWaveUv = (verticalWave ? uv.y : uv.x);
-		vec4 texColor = texture(TEXTURE, uv);
-		// Apply the calculated color.
-		if (keepTransparency) {
-			if (againstWaveUv <= 0.0 || againstWaveUv >= 1.0) {
-				COLOR.a = 0.0;
-			} else {
-				COLOR = texColor;
-			}
-		} else {
-			COLOR = texColor;
-		}
-	}
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_238np"]
-shader = SubResource("Shader_238np")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_apcfy"]
+shader = ExtResource("3_apcfy")
 shader_parameter/waveAmplitude = 0.25
 shader_parameter/correctVertex = true
 shader_parameter/waveFrequency = 10.0
@@ -98,12 +22,6 @@ shader_parameter/freezeSecondHalf = false
 [sub_resource type="QuadMesh" id="QuadMesh_dcdue"]
 size = Vector2(125, -50)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_238np"]
-viewport_path = NodePath("CanvasLayer2/SubViewportContainer2/SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_apcfy"]
-viewport_path = NodePath("CanvasLayer3/SubViewportContainer3/SubViewport")
-
 [sub_resource type="SphereMesh" id="SphereMesh_dcdue"]
 radius = 60.0
 height = 30.0
@@ -116,103 +34,48 @@ gradient = SubResource("Gradient_dcdue")
 fill_from = Vector2(1, 0)
 fill_to = Vector2(1, 1)
 
-[node name="Node" type="Node" unique_id=1638367568]
+[node name="JAD_Logo" type="CanvasLayer" unique_id=1648884430]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1648884430]
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer" unique_id=934486986]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=934486986]
 texture_filter = 1
 offset_right = 125.0
 offset_bottom = 60.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer" unique_id=722254061]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=722254061]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(125, 60)
 render_target_update_mode = 4
 
-[node name="jad_AnimLogo" type="Node2D" parent="CanvasLayer/SubViewportContainer/SubViewport" unique_id=1711099411]
-position = Vector2(0, 5)
-
-[node name="dollarbill" type="MeshInstance2D" parent="CanvasLayer/SubViewportContainer/SubViewport/jad_AnimLogo" unique_id=118691618]
+[node name="dollarbill" type="MeshInstance2D" parent="SubViewportContainer/SubViewport" unique_id=118691618]
 z_index = -2
 texture_filter = 1
-material = SubResource("ShaderMaterial_238np")
-position = Vector2(62.5, 25)
+material = SubResource("ShaderMaterial_apcfy")
+position = Vector2(62.5, 30)
 mesh = SubResource("QuadMesh_dcdue")
 texture = ExtResource("2_dcdue")
 
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/SubViewportContainer/SubViewport" unique_id=266615225]
+[node name="RichTextLabel" type="RichTextLabel" parent="SubViewportContainer/SubViewport" unique_id=1911175921]
 texture_filter = 1
-material = SubResource("ShaderMaterial_238np")
-position = Vector2(62.5, 30)
-texture = SubResource("ViewportTexture_238np")
-
-[node name="Node2D" type="Node2D" parent="CanvasLayer/SubViewportContainer/SubViewport" unique_id=407836841]
-material = SubResource("ShaderMaterial_238np")
-
-[node name="Sprite2D2" type="Sprite2D" parent="CanvasLayer/SubViewportContainer/SubViewport/Node2D" unique_id=139306728]
-z_index = -1
-use_parent_material = true
-position = Vector2(0, 6)
-scale = Vector2(1, 1.25)
-texture = SubResource("ViewportTexture_apcfy")
-centered = false
-
-[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=1857920300]
-layer = 2
-
-[node name="SubViewportContainer2" type="SubViewportContainer" parent="CanvasLayer2" unique_id=251958146]
-visible = false
-texture_filter = 1
+custom_minimum_size = Vector2(125, 60)
 offset_right = 125.0
 offset_bottom = 60.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="SubViewport" type="SubViewport" parent="CanvasLayer2/SubViewportContainer2" unique_id=2038712667]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(125, 60)
-render_target_update_mode = 0
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer2/SubViewportContainer2/SubViewport" unique_id=1911175921]
-custom_minimum_size = Vector2(125, 60)
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/line_separation = -26
+theme_override_constants/line_separation = -10
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("2_apcfy")
 text = "  just
-	   - a -
-			dollar"
+	      - a -
+			      dollar"
 scroll_active = false
 shortcut_keys_enabled = false
 vertical_alignment = 1
 
-[node name="CanvasLayer3" type="CanvasLayer" parent="." unique_id=1529011421]
-layer = 3
-
-[node name="SubViewportContainer3" type="SubViewportContainer" parent="CanvasLayer3" unique_id=121236665]
-visible = false
+[node name="MeshInstance2D" type="MeshInstance2D" parent="SubViewportContainer/SubViewport" unique_id=1093662758]
+z_index = -1
 texture_filter = 1
-custom_minimum_size = Vector2(125, 60)
-offset_right = 125.0
-offset_bottom = 60.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="SubViewport" type="SubViewport" parent="CanvasLayer3/SubViewportContainer3" unique_id=812955012]
-transparent_bg = true
-handle_input_locally = false
-canvas_item_default_texture_filter = 0
-size = Vector2i(125, 60)
-render_target_update_mode = 0
-
-[node name="MeshInstance2D" type="MeshInstance2D" parent="CanvasLayer3/SubViewportContainer3/SubViewport" unique_id=1093662758]
-position = Vector2(62, 10)
-rotation = 0.08726646
+position = Vector2(62, 30)
+rotation = 0.087266445
 mesh = SubResource("SphereMesh_dcdue")
 texture = SubResource("GradientTexture2D_apcfy")

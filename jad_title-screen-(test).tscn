@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://00wdvesehlt3"]
+
+[ext_resource type="PackedScene" uid="uid://chwdbxn7tvwc" path="res://jad_anim-logo.tscn" id="1_myvtt"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_myvtt"]
+size = Vector2(480, 270)
+center_offset = Vector3(240, 135, 0)
+
+[sub_resource type="Gradient" id="Gradient_5cefo"]
+colors = PackedColorArray(1, 1, 1, 1, 0.09411765, 0.65882355, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kmhpg"]
+noise_type = 3
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2yp76"]
+width = 240
+height = 135
+noise = SubResource("FastNoiseLite_kmhpg")
+color_ramp = SubResource("Gradient_5cefo")
+seamless = true
+seamless_blend_skirt = 0.75
+
+[node name="TitleScreen" type="Node" unique_id=1296947062]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=785174762]
+texture_filter = 1
+custom_minimum_size = Vector2(480, 270)
+offset_right = 40.0
+offset_bottom = 40.0
+stretch = true
+metadata/_edit_lock_ = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1248519438]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(480, 270)
+render_target_update_mode = 4
+
+[node name="JAD_Logo" parent="SubViewportContainer/SubViewport" unique_id=1648884430 instance=ExtResource("1_myvtt")]
+offset = Vector2(25, 25)
+transform = Transform2D(1, 0, 0, 1, 25, 25)
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="SubViewportContainer/SubViewport" unique_id=1486818935]
+mesh = SubResource("QuadMesh_myvtt")
+texture = SubResource("NoiseTexture2D_2yp76")

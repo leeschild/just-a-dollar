@@ -14,6 +14,17 @@ config/name="Just-A-Dollar"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=4
+window/size/resizable=false
+window/size/borderless=true
+window/stretch/mode="viewport"
+window/stretch/scale=4.0
+window/stretch/scale_mode="integer"
+
 [dotnet]
 
 project/assembly_name="Just-A-Dollar"
