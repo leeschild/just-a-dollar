@@ -17,7 +17,7 @@ colors = PackedColorArray(1, 1, 1, 1, 0.09411765, 0.65882355, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_kmhpg"]
 noise_type = 3
-fractal_octaves = 2
+fractal_lacunarity = 2.5
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2yp76"]
 width = 240
