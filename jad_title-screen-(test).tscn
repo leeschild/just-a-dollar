@@ -1,6 +1,12 @@
 [gd_scene format=3 uid="uid://00wdvesehlt3"]
 
 [ext_resource type="PackedScene" uid="uid://chwdbxn7tvwc" path="res://jad_anim-logo.tscn" id="1_myvtt"]
+[ext_resource type="Shader" uid="uid://cnmye5bmlwc5u" path="res://sky_scroll.gdshader" id="2_5cefo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kmhpg"]
+shader = ExtResource("2_5cefo")
+shader_parameter/xspeed = 0.1
+shader_parameter/yspeed = 0.1
 
 [sub_resource type="QuadMesh" id="QuadMesh_myvtt"]
 size = Vector2(480, 270)
@@ -38,9 +44,12 @@ size = Vector2i(480, 270)
 render_target_update_mode = 4
 
 [node name="JAD_Logo" parent="SubViewportContainer/SubViewport" unique_id=1648884430 instance=ExtResource("1_myvtt")]
-offset = Vector2(25, 25)
-transform = Transform2D(1, 0, 0, 1, 25, 25)
+offset = Vector2(150, 100)
+transform = Transform2D(1, 0, 0, 1, 150, 100)
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="SubViewportContainer/SubViewport" unique_id=1486818935]
+[node name="BGSkyMesh" type="MeshInstance2D" parent="SubViewportContainer/SubViewport" unique_id=1486818935]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_kmhpg")
 mesh = SubResource("QuadMesh_myvtt")
 texture = SubResource("NoiseTexture2D_2yp76")
+metadata/_edit_lock_ = true
